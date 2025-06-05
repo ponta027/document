@@ -10,7 +10,7 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: 3.9
-      - run: apt -y install graphviz wget 
+      - run: sudo apt -y install graphviz wget 
       - run: wget wget https://github.com/plantuml/plantuml/releases/download/v1.2025.3/plantuml-mit-1.2025.3.jar
       - run: mv plantuml-mit-1.2025.3.jar ~/.local/bin/
       - run: chmod + ~/.local/bin/plantuml
