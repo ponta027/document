@@ -3,6 +3,8 @@ theme:
   name: material
 
 markdown_extensions:
- - plantuml_markdown:
-+    format: svg
+  - plantuml_markdown:
+      format: svg
 
+docs_dir: docs
+site_dir: site
