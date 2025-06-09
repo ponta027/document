@@ -5,20 +5,31 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
+
       - uses: actions/setup-python@v2
         with:
-          python-version: 3.9
-      - run: sudo apt -y install graphviz wget 
-      - run: wget https://github.com/plantuml/plantuml/releases/download/v1.2025.3/plantuml-mit-1.2025.3.jar
-      - run: mkdir -p ~/.local/bin/ && mv plantuml-mit-1.2025.3.jar ~/.local/bin/
-      - run: echo "#!/bin/bash" > ~/.local/bin/plantuml
-      - run: echo "export LANG=ja_JP.UTF-8" >>   ~/.local/bin/plantuml
-      - run: echo "/usr/bin/java -Djava.io.tmpdir=/var/tmp -Djava.awt.headless=true -jar ~/.local/bin/plantuml-mit-1.2025.3.jar -charset UTF-8 $*"  >> ~/.local/bin/plantuml
-      - run: chmod +x ~/.local/bin/plantuml
-      - run: pip install mkdocs mkdocs-material plantuml-markdown
-      - name: Deploy to GitHub Pages
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
-        run: mkdocs gh-deploy --force
+          python-version: 3.9 
+
+      - name: Install system dependencies
+        run: sudo apt -y install graphviz wget 
+
+      - name: Install PlantUML
+        run: |
+          wget https://github.com/plantuml/plantuml/releases/download/v1.2025.3/plantuml-mit-1.2025.3.jar
+          mkdir -p ~/.local/bin/
+          mv plantuml-mit-1.2025.3.jar ~/.local/bin/
+          echo '#!/bin/bash' > ~/.local/bin/plantuml
+          echo 'export LANG=ja_JP.UTF-8' >> ~/.local/bin/plantuml
+          echo '/usr/bin/java -Djava.io.tmpdir=/var/tmp -Djava.awt.headless=true -jar ~/.local/bin/plantuml-mit-1.2025.3.jar -charset UTF-8 "$@"' >> ~/.local/bin/plantuml
+          chmod +x ~/.local/bin/plantuml
+
+      - name: Set PATH for plantuml
+        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Install Python dependencies
+        run: |
+          pip install mkdocs mkdocs-material
+          pip install git+https://github.com/mikitex70/plantuml-markdown.git
