@@ -18,4 +18,4 @@ jobs:
       - run: echo "/usr/bin/java -Djava.io.tmpdir=/var/tmp -Djava.awt.headless=true -jar ~/.local/bin/plantuml-mit-1.2025.3.jar -charset UTF-8 $*"  >> ~/.local/bin/plantuml
       - run: chmod + ~/.local/bin/plantuml
       - run: pip install mkdocs mkdocs-material plantuml-markdown
-      - run: mkdocs gh-deploy --force -d ./docs
+      - run: mkdocs gh-deploy
